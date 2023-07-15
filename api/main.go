@@ -12,6 +12,8 @@ import (
 )
 
 func setupRoutes(app *fiber.App) {
+	app.Get("/health", routes.HealthCheck)
+
 	app.Get("/:url", routes.ResolveURL)
 
 	app.Post("/api/v1", routes.ShortenURL)
