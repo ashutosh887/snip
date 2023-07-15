@@ -41,11 +41,11 @@ func ShortenURL(c *fiber.Ctx) error {
 	r2 := database.CreateClient(1)
 	defer r2.Close()
 
-	val, err := r2.Get(database.Ctx, c.IP()).Result()
+	_, err := r2.Get(database.Ctx, c.IP()).Result()
 	if err == redis.Nil {
 		_ = r2.Set(database.Ctx, c.IP(), os.Getenv("API_QUOTA"), 30 * 60 * time.Second).Err()
  	} else {
-		val, _ = r2.Get(database.Ctx, c.IP()).Result()
+		val, _ := r2.Get(database.Ctx, c.IP()).Result()
 		valInt, _ := strconv.Atoi(val)
 
 		if valInt <= 0 {
@@ -69,7 +69,7 @@ func ShortenURL(c *fiber.Ctx) error {
 	if !helpers.RemoveDomainError(body.URL) {
 		return c.Status(fiber.StatusServiceUnavailable).JSON(fiber.Map{
 			"error": "can't shorten 🙂",
-		})		
+		})
 	}
 
 	// enforce https, SSL
@@ -86,7 +86,7 @@ func ShortenURL(c *fiber.Ctx) error {
 	r := database.CreateClient(0)
 	defer r.Close()
 
-	val, _ = r.Get(database.Ctx, id).Result()
+	val, _ := r.Get(database.Ctx, id).Result()
 
 	if val != "" {
 		return c.Status(fiber.StatusForbidden).JSON(fiber.Map{

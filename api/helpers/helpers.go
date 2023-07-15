@@ -17,15 +17,18 @@ func EnforceHTTP(url string) string {
 // removes all commonly found prefixes
 // checks if the remaining string is the DOMAIN itself 🙂
 func RemoveDomainError(url string) bool {
-
-	if url != os.Getenv("DOMAIN") {
+	if url == os.Getenv("DOMAIN") {
 		return false
 	}
+	newURL := strings.Replace(url, "http://", "", 1)
+	newURL = strings.Replace(newURL, "https://", "", 1)
+	newURL = strings.Replace(newURL, "www.", "", 1)
+	newURL = strings.Split(newURL, "/")[0]
 
-	newUrl := strings.Replace(url, "http://", "", 1)
-	newUrl = strings.Replace(newUrl, "https://", "", 1)
-	newUrl = strings.Replace(newUrl, "www.", "", 1)
-	newUrl = strings.Split(newUrl, "/")[0]
-
-	return newUrl != os.Getenv("DOMAIN")
+	// return (newURL == os.Getenv("DOMAIN"))
+	if newURL == os.Getenv("DOMAIN") {
+		return false
+	} else {
+		return true
+	}
 }
