@@ -12,6 +12,12 @@ import (
 )
 
 func setupRoutes(app *fiber.App) {
+	app.Get("/", func(c *fiber.Ctx) error {
+        return c.JSON(fiber.Map{
+            "message": "Snip up and running!",
+        })
+    })
+
 	app.Get("/health", routes.HealthCheck)
 
 	app.Get("/:url", routes.ResolveURL)
